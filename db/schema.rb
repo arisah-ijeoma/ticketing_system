@@ -10,7 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170302133429) do
+ActiveRecord::Schema.define(version: 20170302145209) do
+
+  create_table "messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.integer  "ticket_id"
+    t.text     "text",       limit: 65535
+    t.index ["ticket_id"], name: "index_messages_on_ticket_id", using: :btree
+  end
 
   create_table "tickets", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.datetime "created_at",                null: false
@@ -35,5 +43,6 @@ ActiveRecord::Schema.define(version: 20170302133429) do
     t.index ["token"], name: "index_users_on_token", unique: true, using: :btree
   end
 
+  add_foreign_key "messages", "tickets"
   add_foreign_key "tickets", "users"
 end
