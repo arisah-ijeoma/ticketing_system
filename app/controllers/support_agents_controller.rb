@@ -19,10 +19,6 @@ class SupportAgentsController < ApplicationController
   private
 
   def support_agent_params
-    params.permit(:email,
-                  :first_name,
-                  :last_name,
-                  :admin,
-                  :password)
+    params.require(:support_agent).permit(:email, :first_name, :last_name, :password)
   end
 end
