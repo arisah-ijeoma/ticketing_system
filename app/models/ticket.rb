@@ -1,5 +1,5 @@
 class Ticket < ApplicationRecord
-  belongs_to :support_agent, foreign_key: :user_id, class_name: 'SupportAgent'
-  belongs_to :customer, foreign_key: :user_id, class_name: 'Customer'
+  belongs_to :support_agent
+  belongs_to :customer
   has_many :messages, dependent: :destroy
 end

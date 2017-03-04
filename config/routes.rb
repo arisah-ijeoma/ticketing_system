@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
-  resources :users
+  resources :customers
+  resources :support_agents
   resources :tickets
   resources :messages
   post    'sessions'     => 'sessions#create'
-  delete  'sessions/:id' => 'sessions#destroy'
+  delete  'sessions' => 'sessions#destroy'
 end

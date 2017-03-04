@@ -5,7 +5,7 @@ class Ability
     if user.try(:admin)
       can :manage, :all
     else
-      can :create, User
+      can :create, Customer
     end
   end
 end
