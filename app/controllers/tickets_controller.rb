@@ -1,5 +1,5 @@
 class TicketsController < ApplicationController
-  load_and_authorize_resource class: 'Ticket'
+  load_and_authorize_resource class: 'Ticket', except: :index
 
   before_action :find_ticket, only: [:show, :update, :destroy]
 
@@ -28,11 +28,7 @@ class TicketsController < ApplicationController
   end
 
   def update
-    if @ticket.update_attributes(ticket_params)
-      render json: @ticket, serializer: TicketSerializer
-    else
-      render json: { error: 'Error updating ticket' }, status: :unprocessable_entity
-    end
+    # @ticket.update_attribute(:status, '')
   end
 
   def destroy
