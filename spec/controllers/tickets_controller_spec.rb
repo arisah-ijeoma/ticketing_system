@@ -3,6 +3,7 @@ require 'rails_helper'
 describe TicketsController do
   let(:customer) { create(:customer) }
   let(:support_agent) { create(:support_agent) }
+  let(:admin_agent) { create(:admin_agent) }
   let(:fishy_user) { create(:customer) }
   let(:ticket) { create(:ticket, customer_id: customer.id) }
   let(:ticket_params) { {
@@ -99,6 +100,27 @@ describe TicketsController do
         expect(response.status).to eq(200)
         expect(Ticket.exists?(ticket.id)).to be false
       end
+    end
+  end
+
+  describe 'admin agents' do
+    before do
+      login admin_agent
+    end
+
+    it 'returns ok status' do
+      get :mine
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns ok status' do
+      put :assign_to_self, params: { id: ticket }
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns ok status' do
+      put :admin_assign, params: { id: ticket, ticket: { support_agent_id: support_agent.id } }
+      expect(response.status).to eq(200)
     end
   end
 end

@@ -11,7 +11,6 @@ class MessagesController < ApplicationController
     else
       render json: { message: 'You are not unauthorized to access this page' }, status: 403
     end
-
   end
 
   def create

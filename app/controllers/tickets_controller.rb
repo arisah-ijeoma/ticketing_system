@@ -1,17 +1,21 @@
 class TicketsController < ApplicationController
   load_and_authorize_resource class: 'Ticket'
 
-  before_action :find_ticket, only: [:show, :update, :destroy]
+  before_action :find_ticket, only: [:show, :admin_assign, :assign_to_self, :destroy]
 
   def index
     tickets = Ticket.all
     render json: tickets
   end
 
+  def mine
+    tickets = Ticket.assigned_to_me(@current_user)
+    render json: tickets
+  end
+
   def create
-    ticket = Ticket.new(ticket_params)
+    ticket = @current_user.tickets.new(ticket_params)
     ticket.status = 'Pending'
-    ticket.customer_id = @current_user.id
 
     if ticket.save
       TicketMailer.creation(ticket).deliver_now
@@ -29,8 +33,22 @@ class TicketsController < ApplicationController
     end
   end
 
-  def update
-    # @ticket.update_attribute(:status, '')
+  def assign_to_self
+    @ticket.update_attributes(status: 'In Review', support_agent_id: @current_user.id)
+    render json: { message: 'Assigned to you' }, status: :ok
+  end
+
+  def admin_assign
+    support_agent_id = params['ticket']['support_agent_id']
+    support_agent = SupportAgent.find_by(id: support_agent_id)
+    @ticket.update_attributes(status: 'In Review', support_agent_id: support_agent_id)
+    render json: { message: "Assigned to #{support_agent.first_name} #{support_agent.last_name}" }, status: :ok
+  end
+
+  def resolved
+    @ticket.update_attributes(status: 'Resolved')
+    TicketMailer.resolved(ticket).deliver_now
+    render json: { message: 'This ticket has been resolved' }, status: :ok
   end
 
   def destroy

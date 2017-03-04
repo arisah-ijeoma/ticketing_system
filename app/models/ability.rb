@@ -5,7 +5,7 @@ class Ability
     if user.try(:admin)
       can :manage, :all
     elsif user.is_a? SupportAgent
-      can [:read, :update, :destroy], Ticket
+      can [:read, :update, :assign_to_self, :mine, :destroy], Ticket
       can [:read, :create, :destroy], Message
     elsif user.is_a? Customer
       can :create, Ticket
