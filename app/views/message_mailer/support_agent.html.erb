@@ -6,6 +6,6 @@
 
 <p><%= @message.text %></p>
 
-<p>Click <%= link_to 'here', ticket_message_url(@ticket, @message) %> to respond.</p>
+<p>Click <%= link_to 'here', ticket_message_url(@ticket, @message), target: '_blank' %> to respond.</p>
 
 <p>Cheers</p>
