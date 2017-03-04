@@ -11,7 +11,7 @@ describe SupportAgentsController do
       end
 
       it 'admin can create support agent' do
-        post :create, { params: attributes_for(:support_agent) }
+        post :create, { params: { support_agent: attributes_for(:support_agent) } }
         expect(response.status).to eq(201)
       end
     end

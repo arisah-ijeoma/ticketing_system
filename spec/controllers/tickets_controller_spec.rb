@@ -13,13 +13,13 @@ describe TicketsController do
   describe 'GET#index' do
     it 'returns ok status' do
       get :index
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(403)
     end
   end
 
   describe 'can not create tickets if not logged in' do
     it 'does not authorize customer' do
-      post :create, params: ticket_params
+      post :create, params: { ticket: ticket_params }
       expect(response.status).to eq(403)
     end
   end
@@ -29,9 +29,16 @@ describe TicketsController do
       login customer
     end
 
+    describe 'GET#index' do
+      it 'returns ok status' do
+        get :index
+        expect(response.status).to eq(403)
+      end
+    end
+
     describe 'POST#create' do
       it 'returns ok status' do
-        post :create, params: ticket_params
+        post :create, params: { ticket: ticket_params }
         expect(response.status).to eq(201)
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(ActionMailer::Base.deliveries.first.to).to eq([customer.email])
@@ -65,9 +72,16 @@ describe TicketsController do
       login support_agent
     end
 
+    describe 'GET#index' do
+      it 'returns ok status' do
+        get :index
+        expect(response.status).to eq(200)
+      end
+    end
+
     describe 'POST#create' do
       it 'does not authorize' do
-        post :create, params: ticket_params
+        post :create, params: { ticket: ticket_params }
         expect(response.status).to eq(403)
       end
     end

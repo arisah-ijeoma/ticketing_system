@@ -1,5 +1,5 @@
 class TicketsController < ApplicationController
-  load_and_authorize_resource class: 'Ticket', except: :index
+  load_and_authorize_resource class: 'Ticket'
 
   before_action :find_ticket, only: [:show, :update, :destroy]
 
