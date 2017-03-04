@@ -40,18 +40,23 @@ describe MessagesController do
     end
 
     describe 'POST#create' do
-      it 'can not create' do
-        post :create, params: { ticket_id: ticket, message: {text: 'I need you'} }
-        expect(response.status).to eq(403)
+      it 'can create' do
+        post :create, params: { ticket_id: ticket, message: {text: 'Access granted'} }
+        expect(response.status).to eq(201)
       end
     end
 
-    describe 'PUT#update' do
-      it 'returns updated status' do
-        put :update, params: { ticket_id: ticket, id: message, message: {text: 'Here is what you need'} }
+    describe 'GET#show' do
+      it 'has ok status' do
+        get :show, params: { ticket_id: ticket, id: message }
         expect(response.status).to eq(200)
-        expect(ActionMailer::Base.deliveries.count).to eq(1)
-        expect(ActionMailer::Base.deliveries.first.to).to eq([support_agent.email])
+      end
+
+      it 'fishy user can not read' do
+        login fishy_user
+
+        get :show, params: { ticket_id: ticket, id: message }
+        expect(response.status).to eq(403)
       end
     end
 
@@ -77,19 +82,17 @@ describe MessagesController do
 
     describe 'POST#create' do
       it 'returns created status' do
-        post :create, params: { ticket_id: ticket, message: {text: 'I need you'} }
+        post :create, params: { ticket_id: ticket, message: {text: 'I need access'} }
         expect(response.status).to eq(201)
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(ActionMailer::Base.deliveries.first.to).to eq([customer.email])
       end
     end
 
-    describe 'PUT#update' do
-      it 'returns updated status' do
-        put :update, params: { ticket_id: ticket, id: message, message: {text: 'You need me'} }
+    describe 'GET#show' do
+      it 'has ok status' do
+        get :show, params: { ticket_id: ticket, id: message }
         expect(response.status).to eq(200)
-        expect(ActionMailer::Base.deliveries.count).to eq(1)
-        expect(ActionMailer::Base.deliveries.first.to).to eq([customer.email])
       end
     end
 

@@ -2,7 +2,7 @@ class MessagesController < ApplicationController
   load_and_authorize_resource class: 'Message'
 
   before_action :find_ticket, only: [:index, :create]
-  before_action :find_message, only: [:update, :destroy]
+  before_action :find_message, only: [:show, :destroy]
 
   def index
     if (@current_user == @ticket.customer) || (@current_user.is_a? SupportAgent)
@@ -18,23 +18,22 @@ class MessagesController < ApplicationController
     message = @ticket.messages.new(message_params)
 
     if message.save
-      MessageMailer.creation(message).deliver_now
+      if @current_user.is_a? Customer
+        MessageMailer.support_agent(message).deliver_now
+      else
+        MessageMailer.customer(message).deliver_now
+      end
       render json: message, status: :created, serializer: MessageSerializer, root: nil
     else
       render json: { error: 'Error' }, status: :unprocessable_entity
     end
   end
 
-  def update
-    if @message.update_attributes(message_params)
-      if @current_user.is_a? Customer
-        MessageMailer.support_agent(@message).deliver_now
-      else
-        MessageMailer.customer(@message).deliver_now
-      end
-      render json: @message, status: 200, serializer: MessageSerializer, root: nil
+  def show
+    if @message
+      render json: @message, serializer: MessageSerializer
     else
-      render json: { error: 'Error' }, status: :unprocessable_entity
+      render status: 404
     end
   end
 

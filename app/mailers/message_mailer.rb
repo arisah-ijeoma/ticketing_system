@@ -1,11 +1,4 @@
 class MessageMailer < ApplicationMailer
-  def creation(message)
-    @message = message
-    @ticket = message.ticket
-    @customer = @ticket.customer
-    mail(to: @customer.email, subject: "Re: [Ticket ID ##{@ticket.id}#] - #{@ticket.title}")
-  end
-
   def customer(message)
     @message = message
     @ticket = message.ticket
