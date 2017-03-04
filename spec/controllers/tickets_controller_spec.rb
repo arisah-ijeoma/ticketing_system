@@ -11,7 +11,7 @@ describe TicketsController do
   } }
 
   describe 'GET#index' do
-    it 'returns ok status' do
+    it 'does not authorize for users not logged in' do
       get :index
       expect(response.status).to eq(403)
     end

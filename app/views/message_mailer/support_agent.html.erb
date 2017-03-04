@@ -1,0 +1,11 @@
+<p>Dear <%= @support_agent.first_name %> <%= @support_agent.last_name %>,</p>
+
+<p>Your attention is required </p>
+
+<p>Customer:</p>
+
+<p><%= @message.text %></p>
+
+<p>Click <%= link_to 'here', ticket_message_url(@ticket, @message) %> to respond.</p>
+
+<p>Cheers</p>
