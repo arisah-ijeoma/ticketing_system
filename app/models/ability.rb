@@ -12,7 +12,7 @@ class Ability
       can :show, Ticket do |ticket|
         user == ticket.customer
       end
-      can [:index, :update], Message do |message|
+      can [:read, :update], Message do |message|
         user == message.ticket.customer
       end
     else

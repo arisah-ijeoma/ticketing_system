@@ -1,12 +1,17 @@
 class MessagesController < ApplicationController
   load_and_authorize_resource class: 'Message'
 
-  before_action :find_ticket
-  before_action :find_message, only: [:index, :update, :destroy]
+  before_action :find_ticket, only: [:index, :create]
+  before_action :find_message, only: [:update, :destroy]
 
   def index
-    messages = @ticket.messages
-    render json: messages
+    if (@current_user == @ticket.customer) || (@current_user.is_a? SupportAgent)
+      messages = @ticket.messages
+      render json: messages
+    else
+      render json: { message: 'You are not unauthorized to access this page' }, status: 403
+    end
+
   end
 
   def create
@@ -49,6 +54,7 @@ class MessagesController < ApplicationController
   end
 
   def find_message
-    @message = @ticket.messages.find_by(id: params[:id])
+    ticket = Ticket.find_by(id: params[:ticket_id])
+    @message = ticket.messages.find_by(id: params[:id])
   end
 end

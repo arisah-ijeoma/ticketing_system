@@ -2,12 +2,19 @@ require 'rails_helper'
 
 describe MessagesController do
   let(:customer) { create(:customer) }
+  let(:fishy_user) { create(:customer) }
   let(:support_agent) { create(:support_agent) }
   let(:ticket) { create(:ticket, customer_id: customer.id, support_agent_id: support_agent.id) }
   let(:message) { create(:message, ticket_id: ticket.id) }
 
   describe 'GET#index' do
     it 'does not authorize for users not logged in' do
+      get :index, params: {ticket_id: ticket}
+      expect(response.status).to eq(403)
+    end
+
+    it 'does not authorize users that do not own the ticket' do
+      login fishy_user
       get :index, params: {ticket_id: ticket}
       expect(response.status).to eq(403)
     end
