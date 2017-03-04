@@ -33,6 +33,8 @@ describe TicketsController do
       it 'returns ok status' do
         post :create, params: ticket_params
         expect(response.status).to eq(201)
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+        expect(ActionMailer::Base.deliveries.first.to).to eq([customer.email])
       end
     end
 

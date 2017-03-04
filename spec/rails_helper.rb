@@ -58,6 +58,10 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
+  config.after(:each) do
+    ActionMailer::Base.deliveries.clear
+  end
+
   config.include FactoryGirl::Syntax::Methods
   config.include AuthHelper, type: :controller
   config.infer_spec_type_from_file_location!

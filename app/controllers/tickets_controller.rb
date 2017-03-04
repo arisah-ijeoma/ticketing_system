@@ -11,11 +11,13 @@ class TicketsController < ApplicationController
   def create
     ticket = Ticket.new(ticket_params)
     ticket.status = 'Pending'
+    ticket.customer_id = @current_user.id
 
     if ticket.save
+      TicketMailer.creation(ticket).deliver_now
       render json: ticket, status: :created, serializer: TicketSerializer, root: nil
     else
-      render json: { error: 'Error creating user' }, status: :unprocessable_entity
+      render json: { error: 'Error creating ticket' }, status: :unprocessable_entity
     end
   end
 
