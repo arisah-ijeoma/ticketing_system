@@ -6,6 +6,8 @@ describe TicketsController do
   let(:admin_agent) { create(:admin_agent) }
   let(:fishy_user) { create(:customer) }
   let(:ticket) { create(:ticket, customer_id: customer.id) }
+  let(:resolved_ticket) { create(:ticket, status: 'Resolved') }
+  let(:ticket_2) { create(:ticket, status: 'Resolved', updated_at: (Date.today + 1.month)) }
   let(:ticket_params) { {
           'title' => ticket.title,
           'description' => ticket.description
@@ -120,6 +122,11 @@ describe TicketsController do
 
     it 'returns ok status' do
       put :admin_assign, params: { id: ticket, ticket: { support_agent_id: support_agent.id } }
+      expect(response.status).to eq(200)
+    end
+
+    it 'returns tickets closed a month ago' do
+      get :report
       expect(response.status).to eq(200)
     end
   end

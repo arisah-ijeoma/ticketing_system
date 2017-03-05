@@ -1,3 +1,5 @@
+require 'render_anywhere'
+
 class TicketsController < ApplicationController
   load_and_authorize_resource class: 'Ticket'
 
@@ -10,6 +12,11 @@ class TicketsController < ApplicationController
 
   def mine
     tickets = Ticket.assigned_to_me(@current_user)
+    render json: tickets
+  end
+
+  def report
+    tickets = Ticket.closed_one_month
     render json: tickets
   end
 
@@ -64,5 +71,14 @@ class TicketsController < ApplicationController
 
   def find_ticket
     @ticket = Ticket.find_by(id: params[:id])
+  end
+
+  def to_pdf
+    kit = PDFKit.new(as_html, page_size: 'A4')
+    kit.to_file("#{Rails.root}/public/report.pdf")
+  end
+
+  def filename
+    "report_one_month.pdf"
   end
 end

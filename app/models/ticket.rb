@@ -6,4 +6,8 @@ class Ticket < ApplicationRecord
   scope :assigned_to_me, -> agent {
     where(support_agent_id: agent.id)
   }
+
+  scope :closed_one_month, -> {
+    where('updated_at > ? && status like ?', (Date.today - 1.month), 'Resolved')
+  }
 end
