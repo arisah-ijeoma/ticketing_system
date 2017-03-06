@@ -3,6 +3,8 @@ class Ticket < ApplicationRecord
   belongs_to :customer
   has_many :messages, dependent: :destroy
 
+  validates :title, :description, presence: true
+
   scope :assigned_to_me, -> agent {
     where(support_agent_id: agent.id)
   }
