@@ -15,6 +15,8 @@ class SessionsController < ApplicationController
                serializer: CustomerSessionSerializer
       end
 
+    else
+      render json: {message: 'Invalid credentials'}, status: 404
     end
   end
 

@@ -1,4 +1,4 @@
-require 'render_anywhere'
+# require 'render_anywhere'
 
 class TicketsController < ApplicationController
   load_and_authorize_resource class: 'Ticket'

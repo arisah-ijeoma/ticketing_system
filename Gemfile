@@ -29,6 +29,9 @@ gem 'cancancan'
 # Hide sensitive data
 gem 'figaro'
 
+# handle CORS
+gem 'rack-cors', require: 'rack/cors'
+
 group :development, :test do
   gem 'pry'
   gem 'pry-rails'
