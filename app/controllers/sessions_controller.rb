@@ -24,6 +24,6 @@ class SessionsController < ApplicationController
     user = @current_user
     head 404 and return unless user
     user.regenerate_token
-    head 204
+    head 200
   end
 end

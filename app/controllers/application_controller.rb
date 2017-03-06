@@ -10,12 +10,12 @@ class ApplicationController < ActionController::API
   def validate_login
     token = request.headers['Authorization']
     return unless token
+
     user = SupportAgent.find_by(token: token) || Customer.find_by(token: token)
     return unless user
-    if 15.minutes.ago < user.updated_at
-      user.touch
-      @current_user = user
-    end
+
+    user.touch
+    @current_user = user
   end
 
   def validate_user
