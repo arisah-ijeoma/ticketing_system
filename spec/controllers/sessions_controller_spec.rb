@@ -39,7 +39,7 @@ describe SessionsController do
         delete :destroy
 
         expect(response.body).to eq('')
-        expect(response.status).to eq(204)
+        expect(response.status).to eq(200)
       end
     end
 
