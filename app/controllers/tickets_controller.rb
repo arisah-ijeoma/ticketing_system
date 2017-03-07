@@ -6,7 +6,11 @@ class TicketsController < ApplicationController
   before_action :find_ticket, only: [:show, :admin_assign, :assign_to_self, :destroy]
 
   def index
-    tickets = Ticket.all
+    tickets = if @current_user.is_a? Customer
+                @current_user.tickets
+              else
+                Ticket.all
+              end
     render json: tickets
   end
 
@@ -42,20 +46,20 @@ class TicketsController < ApplicationController
 
   def assign_to_self
     @ticket.update_attributes(status: 'In Review', support_agent_id: @current_user.id)
-    render json: { message: 'Assigned to you' }, status: :ok
+    render json: { ticket: @ticket, message: 'Assigned to you' }, status: :ok
   end
 
   def admin_assign
     support_agent_id = params['ticket']['support_agent_id']
     support_agent = SupportAgent.find_by(id: support_agent_id)
     @ticket.update_attributes(status: 'In Review', support_agent_id: support_agent_id)
-    render json: { message: "Assigned to #{support_agent.first_name} #{support_agent.last_name}" }, status: :ok
+    render json: { ticket: @ticket, message: "Assigned to #{support_agent.first_name} #{support_agent.last_name}" }, status: :ok
   end
 
   def resolved
     @ticket.update_attributes(status: 'Resolved')
-    TicketMailer.resolved(ticket).deliver_now
-    render json: { message: 'This ticket has been resolved' }, status: :ok
+    TicketMailer.resolved(@ticket).deliver_now
+    render json: { ticket: @ticket, message: 'This ticket has been resolved' }, status: :ok
   end
 
   def destroy

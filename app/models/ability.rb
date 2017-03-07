@@ -9,7 +9,7 @@ class Ability
       can [:read, :create, :destroy], Message
     elsif user.is_a? Customer
       can :create, Ticket
-      can :show, Ticket do |ticket|
+      can [:read, :show], Ticket do |ticket|
         user == ticket.customer
       end
       can :create, Message

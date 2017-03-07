@@ -35,7 +35,7 @@ describe TicketsController do
     describe 'GET#index' do
       it 'returns ok status' do
         get :index
-        expect(response.status).to eq(403)
+        expect(response.status).to eq(200)
       end
     end
 

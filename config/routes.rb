@@ -5,9 +5,9 @@ Rails.application.routes.draw do
   resources :tickets do
     get :mine, on: :collection
     get :report, on: :collection
-    get :download, on: :collection
     put :assign_to_self, on: :member
     put :admin_assign, on: :member
+    put :resolved, on: :member
     resources :messages
   end
   post    'sessions'     => 'sessions#create'
