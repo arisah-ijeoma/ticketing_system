@@ -14,10 +14,6 @@ gem 'mysql2', '~> 0.3.18'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 
-# make file pdf exportable
-gem 'wicked_pdf'
-gem 'wkhtmltopdf-binary'
-
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 

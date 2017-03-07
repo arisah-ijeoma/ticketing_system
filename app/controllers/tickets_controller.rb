@@ -1,5 +1,3 @@
-# require 'render_anywhere'
-
 class TicketsController < ApplicationController
   load_and_authorize_resource class: 'Ticket'
 
@@ -77,12 +75,12 @@ class TicketsController < ApplicationController
     @ticket = Ticket.find_by(id: params[:id])
   end
 
-  def to_pdf
-    kit = PDFKit.new(as_html, page_size: 'A4')
-    kit.to_file("#{Rails.root}/public/report.pdf")
-  end
-
-  def filename
-    "report_one_month.pdf"
-  end
+  # def to_pdf
+  #   kit = PDFKit.new(as_html, page_size: 'A4')
+  #   kit.to_file("#{Rails.root}/public/report.pdf")
+  # end
+  #
+  # def filename
+  #   "report_one_month.pdf"
+  # end
 end
